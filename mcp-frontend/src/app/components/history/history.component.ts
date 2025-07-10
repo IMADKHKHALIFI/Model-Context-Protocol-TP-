@@ -10,90 +10,85 @@ import { ChatMessage } from '../../models/interfaces';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="history-container">
-      <div class="history-header">
-        <h2>📝 Conversation History</h2>
-        <p class="history-subtitle">Review your chat history and interactions</p>
-        <div class="header-actions">
-          <button class="btn btn-secondary" (click)="exportHistory()">
-            📄 Export
-          </button>
-          <button class="btn btn-danger" (click)="clearHistory()">
-            🗑️ Clear All
-          </button>
-        </div>
-      </div>
-
-      <div class="history-filters">
-        <div class="filter-group">
-          <label>Filter by type:</label>
-          <select [(ngModel)]="filterType" (change)="applyFilters()" class="form-control">
-            <option value="all">All Messages</option>
-            <option value="user">User Messages</option>
-            <option value="ai">AI Responses</option>
-            <option value="tools">Messages with Tools</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Search:</label>
-          <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" 
-                 placeholder="Search in messages..." class="form-control">
-        </div>
-      </div>
-
-      <div class="history-stats" *ngIf="messages.length > 0">
-        <div class="stat-card">
-          <h4>{{getTotalMessages()}}</h4>
-          <p>Total Messages</p>
-        </div>
-        <div class="stat-card">
-          <h4>{{getUserMessages()}}</h4>
-          <p>User Queries</p>
-        </div>
-        <div class="stat-card">
-          <h4>{{getAIMessages()}}</h4>
-          <p>AI Responses</p>
-        </div>
-        <div class="stat-card">
-          <h4>{{getToolMessages()}}</h4>
-          <p>Tool Calls</p>
+    <div class="history-container fade-in">
+      <div class="history-header card">
+        <div class="card-header">
+          <div class="header-content">
+            <h2 class="card-title">Conversation History</h2>
+            <p class="card-subtitle">Review your chat history and interactions</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" (click)="exportHistory()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Export
+            </button>
+            <button class="btn btn-danger" (click)="clearHistory()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Clear All
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="history-content">
-        <div *ngIf="filteredMessages.length === 0 && messages.length === 0" class="empty-state">
-          <div class="empty-icon">📭</div>
+        <div *ngIf="messages.length === 0" class="empty-state">
+          <div class="empty-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
           <h3>No conversation history</h3>
           <p>Start a conversation in the chat to see your history here.</p>
         </div>
 
-        <div *ngIf="filteredMessages.length === 0 && messages.length > 0" class="empty-state">
-          <div class="empty-icon">🔍</div>
-          <h3>No messages found</h3>
-          <p>Try adjusting your search or filter criteria.</p>
-        </div>
-
-        <div class="history-messages">
-          <div *ngFor="let message of filteredMessages; trackBy: trackMessage; let i = index" 
-               class="history-message"
+        <div class="history-messages" *ngIf="messages.length > 0">
+          <div *ngFor="let message of messages; trackBy: trackMessage; let i = index" 
+               class="history-message slide-up"
                [class.user-message]="message.isUser"
                [class.ai-message]="!message.isUser">
             
             <div class="message-header">
+              <div class="message-avatar">
+                <div class="avatar" [class.user-avatar]="message.isUser" [class.ai-avatar]="!message.isUser">
+                  <svg *ngIf="message.isUser" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <svg *ngIf="!message.isUser" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="9" cy="9" r="1" fill="currentColor"/>
+                    <path d="M13 5.5C13 7.5 14.5 9 16.5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M13 18.5C13 16.5 14.5 15 16.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
               <div class="message-meta">
                 <span class="message-type">
-                  {{message.isUser ? '👤 User' : '🤖 AI Assistant'}}
+                  {{message.isUser ? 'You' : 'AI Assistant'}}
                 </span>
                 <span class="message-time">
                   {{message.timestamp | date:'medium'}}
                 </span>
               </div>
               <div class="message-actions">
-                <button class="btn-icon" (click)="copyMessage(message)" title="Copy message">
-                  📋
+                <button class="btn-icon" (click)="copyMessage(message)" [title]="'Copy message'">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </button>
-                <button class="btn-icon" (click)="deleteMessage(message.id)" title="Delete message">
-                  🗑️
+                <button class="btn-icon" (click)="deleteMessage(message.id)" [title]="'Delete message'">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -101,45 +96,27 @@ import { ChatMessage } from '../../models/interfaces';
             <div class="message-content">
               <div class="message-text" [innerHTML]="formatMessage(message.content)"></div>
               
-              <div *ngIf="message.tools && message.tools.length > 0" class="tools-section">
-                <h5>🔧 Tools Used ({{message.tools.length}}):</h5>
-                <div *ngFor="let tool of message.tools" class="tool-item">
-                  <div class="tool-header">
-                    <strong>{{tool.name}}</strong>
+              <div *ngIf="message.tools && message.tools.length > 0" class="tools-used">
+                <div class="tools-header">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.7 6.3C15.4 7 15.4 8.1 14.7 8.8L8.8 14.7C8.1 15.4 7 15.4 6.3 14.7C5.6 14 5.6 12.9 6.3 12.2L12.2 6.3C12.9 5.6 14 5.6 14.7 6.3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>Tools Used ({{message.tools.length}})</span>
+                </div>
+                <div *ngFor="let tool of message.tools" class="tool-call">
+                  <div class="tool-name">{{tool.name}}</div>
+                  <div *ngIf="tool.arguments" class="tool-section">
+                    <span class="tool-label">Arguments:</span>
+                    <pre class="tool-data">{{tool.arguments | json}}</pre>
                   </div>
-                  <div *ngIf="tool.arguments" class="tool-args">
-                    <span class="label">Arguments:</span>
-                    <pre>{{formatJSON(tool.arguments)}}</pre>
-                  </div>
-                  <div *ngIf="tool.result" class="tool-result">
-                    <span class="label">Result:</span>
-                    <pre>{{formatJSON(tool.result)}}</pre>
+                  <div *ngIf="tool.result" class="tool-section">
+                    <span class="tool-label">Result:</span>
+                    <pre class="tool-data">{{tool.result | json}}</pre>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="history-pagination" *ngIf="filteredMessages.length > messagesPerPage">
-        <div class="pagination-info">
-          Showing {{(currentPage - 1) * messagesPerPage + 1}} - 
-          {{Math.min(currentPage * messagesPerPage, filteredMessages.length)}} 
-          of {{filteredMessages.length}} messages
-        </div>
-        <div class="pagination-controls">
-          <button class="btn btn-secondary" 
-                  [disabled]="currentPage === 1" 
-                  (click)="previousPage()">
-            ← Previous
-          </button>
-          <span class="page-info">Page {{currentPage}} of {{totalPages}}</span>
-          <button class="btn btn-secondary" 
-                  [disabled]="currentPage === totalPages" 
-                  (click)="nextPage()">
-            Next →
-          </button>
         </div>
       </div>
     </div>
@@ -148,406 +125,307 @@ import { ChatMessage } from '../../models/interfaces';
     .history-container {
       max-width: 1000px;
       margin: 0 auto;
+      padding: var(--space-6);
     }
 
     .history-header {
-      background: white;
-      padding: 24px;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: var(--space-6);
+    }
+
+    .card-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 16px;
+      align-items: center;
+      padding: var(--space-6);
     }
 
-    .history-header h2 {
+    .header-content h2 {
+      margin: 0 0 var(--space-1) 0;
+    }
+
+    .header-content p {
       margin: 0;
-      color: #2c3e50;
-    }
-
-    .history-subtitle {
-      color: #7f8c8d;
-      margin: 4px 0 0 0;
+      color: var(--text-secondary);
     }
 
     .header-actions {
       display: flex;
-      gap: 12px;
-    }
-
-    .history-filters {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .filter-group {
-      flex: 1;
-      min-width: 200px;
-    }
-
-    .filter-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #374151;
-    }
-
-    .history-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .stat-card h4 {
-      margin: 0 0 8px 0;
-      font-size: 2rem;
-      color: #667eea;
-      font-weight: 700;
-    }
-
-    .stat-card p {
-      margin: 0;
-      color: #7f8c8d;
-      font-size: 0.9rem;
+      gap: var(--space-3);
     }
 
     .history-content {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
       overflow: hidden;
     }
 
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
-      color: #7f8c8d;
+      padding: var(--space-12);
+      color: var(--text-secondary);
     }
 
     .empty-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
+      margin-bottom: var(--space-4);
+      color: var(--text-tertiary);
     }
 
     .empty-state h3 {
-      color: #2c3e50;
-      margin-bottom: 12px;
+      margin: 0 0 var(--space-2) 0;
+      color: var(--text-primary);
+    }
+
+    .empty-state p {
+      margin: 0;
     }
 
     .history-messages {
-      max-height: 600px;
-      overflow-y: auto;
+      padding: var(--space-6);
     }
 
     .history-message {
-      border-bottom: 1px solid #f1f1f1;
-      padding: 24px;
-      transition: background-color 0.2s ease;
-    }
-
-    .history-message:hover {
-      background-color: #f8f9fa;
+      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-6) 0;
+      transition: var(--transition-all);
     }
 
     .history-message:last-child {
       border-bottom: none;
     }
 
-    .user-message {
-      background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    .history-message:hover {
+      background: var(--bg-secondary);
+      margin: 0 calc(-1 * var(--space-6));
+      padding: var(--space-6);
+      border-radius: var(--border-radius-md);
     }
 
     .message-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .message-avatar {
+      flex-shrink: 0;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .user-avatar {
+      background: var(--accent-blue);
+    }
+
+    .ai-avatar {
+      background: var(--accent-purple);
     }
 
     .message-meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      flex: 1;
     }
 
     .message-type {
       font-weight: 600;
-      color: #2c3e50;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: var(--space-1);
     }
 
     .message-time {
-      color: #7f8c8d;
+      color: var(--text-tertiary);
       font-size: 0.875rem;
     }
 
     .message-actions {
       display: flex;
-      gap: 8px;
+      gap: var(--space-1);
     }
 
     .btn-icon {
       background: none;
       border: none;
+      padding: var(--space-2);
+      border-radius: var(--border-radius-md);
+      color: var(--text-tertiary);
       cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 14px;
-      transition: background-color 0.2s ease;
+      transition: var(--transition-all);
     }
 
     .btn-icon:hover {
-      background-color: #e9ecef;
+      background: var(--secondary-100);
+      color: var(--text-secondary);
     }
 
     .message-content {
-      line-height: 1.6;
+      margin-left: calc(40px + var(--space-3));
     }
 
     .message-text {
-      margin-bottom: 16px;
-      word-wrap: break-word;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: var(--space-3);
     }
 
-    .tools-section {
-      background: rgba(0, 0, 0, 0.02);
-      padding: 16px;
-      border-radius: 8px;
-      border-left: 4px solid #667eea;
+    .tools-used {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
     }
 
-    .tools-section h5 {
-      margin: 0 0 12px 0;
-      color: #2c3e50;
-      font-size: 0.9rem;
-    }
-
-    .tool-item {
-      background: white;
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      border: 1px solid #e1e8ed;
-    }
-
-    .tool-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .tool-header {
+    .tools-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
       font-weight: 600;
-      color: #495057;
-      margin-bottom: 8px;
+      color: var(--text-primary);
     }
 
-    .tool-args, .tool-result {
-      margin-bottom: 8px;
+    .tools-header svg {
+      color: var(--primary-500);
     }
 
-    .tool-args:last-child, .tool-result:last-child {
+    .tool-call {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      padding: var(--space-3);
+      margin-bottom: var(--space-2);
+    }
+
+    .tool-call:last-child {
       margin-bottom: 0;
     }
 
-    .label {
-      font-weight: 500;
-      color: #6c757d;
-      font-size: 0.875rem;
+    .tool-name {
+      font-weight: 600;
+      color: var(--primary-600);
+      margin-bottom: var(--space-2);
     }
 
-    .tool-args pre, .tool-result pre {
-      background: #f8f9fa;
-      padding: 8px;
-      border-radius: 4px;
+    .tool-section {
+      margin-bottom: var(--space-2);
+    }
+
+    .tool-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .tool-label {
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      display: block;
+      margin-bottom: var(--space-1);
+    }
+
+    .tool-data {
+      background: var(--secondary-100);
+      padding: var(--space-2);
+      border-radius: var(--border-radius-sm);
+      font-family: var(--font-mono);
       font-size: 0.8rem;
-      margin: 4px 0 0 0;
+      color: var(--text-primary);
+      margin: 0;
+      white-space: pre-wrap;
       overflow-x: auto;
-      max-height: 120px;
-      overflow-y: auto;
-    }
-
-    .history-pagination {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 24px;
-      background: #f8f9fa;
-      border-top: 1px solid #e1e8ed;
-    }
-
-    .pagination-info {
-      color: #7f8c8d;
-      font-size: 0.875rem;
-    }
-
-    .pagination-controls {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .page-info {
-      color: #495057;
-      font-weight: 500;
-    }
-
-    /* Scrollbar styling */
-    .history-messages::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .history-messages::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-
-    .history-messages::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 3px;
-    }
-
-    .history-messages::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
     }
 
     @media (max-width: 768px) {
-      .history-header {
+      .history-container {
+        padding: var(--space-4);
+      }
+
+      .card-header {
         flex-direction: column;
         align-items: stretch;
+        gap: var(--space-4);
       }
-      
-      .history-filters {
-        flex-direction: column;
-        gap: 16px;
+
+      .header-actions {
+        justify-content: center;
       }
-      
-      .filter-group {
-        min-width: auto;
+
+      .history-messages {
+        padding: var(--space-4);
       }
-      
-      .history-stats {
-        grid-template-columns: repeat(2, 1fr);
+
+      .history-message {
+        padding: var(--space-4) 0;
       }
-      
-      .message-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+
+      .history-message:hover {
+        margin: 0 calc(-1 * var(--space-4));
+        padding: var(--space-4);
       }
-      
-      .history-pagination {
-        flex-direction: column;
-        gap: 12px;
+
+      .message-content {
+        margin-left: 0;
+        margin-top: var(--space-3);
       }
     }
   `]
 })
 export class HistoryComponent implements OnInit, OnDestroy {
   messages: ChatMessage[] = [];
-  filteredMessages: ChatMessage[] = [];
-  filterType: string = 'all';
-  searchTerm: string = '';
-  currentPage: number = 1;
-  messagesPerPage: number = 10;
-  totalPages: number = 1;
   
-  private subscription: Subscription = new Subscription();
+  private messagesSubscription: Subscription | null = null;
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.apiService.messages$.subscribe(messages => {
-        this.messages = messages;
-        this.applyFilters();
-      })
-    );
+    this.loadMessages();
+    this.subscribeToMessages();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  applyFilters(): void {
-    let filtered = [...this.messages];
-
-    // Apply type filter
-    if (this.filterType !== 'all') {
-      switch (this.filterType) {
-        case 'user':
-          filtered = filtered.filter(msg => msg.isUser);
-          break;
-        case 'ai':
-          filtered = filtered.filter(msg => !msg.isUser);
-          break;
-        case 'tools':
-          filtered = filtered.filter(msg => msg.tools && msg.tools.length > 0);
-          break;
-      }
-    }
-
-    // Apply search filter
-    if (this.searchTerm.trim()) {
-      const searchLower = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(msg => 
-        msg.content.toLowerCase().includes(searchLower) ||
-        (msg.tools && msg.tools.some(tool => 
-          tool.name.toLowerCase().includes(searchLower)
-        ))
-      );
-    }
-
-    this.filteredMessages = filtered.reverse(); // Show newest first
-    this.totalPages = Math.ceil(this.filteredMessages.length / this.messagesPerPage);
-    this.currentPage = 1;
-  }
-
-  getTotalMessages(): number {
-    return this.messages.length;
-  }
-
-  getUserMessages(): number {
-    return this.messages.filter(msg => msg.isUser).length;
-  }
-
-  getAIMessages(): number {
-    return this.messages.filter(msg => !msg.isUser).length;
-  }
-
-  getToolMessages(): number {
-    return this.messages.filter(msg => msg.tools && msg.tools.length > 0).length;
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
+    if (this.messagesSubscription) {
+      this.messagesSubscription.unsubscribe();
     }
   }
 
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
+  private loadMessages(): void {
+    // Load messages from localStorage or service
+    const storedMessages = localStorage.getItem('chatMessages');
+    if (storedMessages) {
+      this.messages = JSON.parse(storedMessages);
     }
+  }
+
+  private subscribeToMessages(): void {
+    // Subscribe to messages updates from the chat service
+    this.messagesSubscription = this.apiService.messages$.subscribe((messages: ChatMessage[]) => {
+      this.messages = messages;
+    });
+  }
+
+  trackMessage(index: number, message: ChatMessage): string {
+    return message.id;
+  }
+
+  formatMessage(content: string): string {
+    // Basic HTML formatting for messages
+    return content
+      .replace(/\n/g, '<br>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/`(.*?)`/g, '<code>$1</code>');
   }
 
   copyMessage(message: ChatMessage): void {
     navigator.clipboard.writeText(message.content).then(() => {
-      // You could show a toast notification here
       console.log('Message copied to clipboard');
     }).catch(err => {
       console.error('Failed to copy message:', err);
@@ -556,69 +434,26 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   deleteMessage(messageId: string): void {
     if (confirm('Are you sure you want to delete this message?')) {
-      // Remove from current messages
-      const currentMessages = this.apiService.getMessages();
-      const updatedMessages = currentMessages.filter(msg => msg.id !== messageId);
-      
-      // Update the service (you might need to add a method for this)
-      this.apiService.clearMessages();
-      updatedMessages.forEach(msg => this.apiService.addMessage(msg));
-    }
-  }
-
-  clearHistory(): void {
-    if (confirm('Are you sure you want to clear all conversation history? This action cannot be undone.')) {
-      this.apiService.clearMessages();
+      this.messages = this.messages.filter(msg => msg.id !== messageId);
+      localStorage.setItem('chatMessages', JSON.stringify(this.messages));
     }
   }
 
   exportHistory(): void {
-    const exportData = {
-      exportDate: new Date().toISOString(),
-      totalMessages: this.messages.length,
-      messages: this.messages.map(msg => ({
-        id: msg.id,
-        content: msg.content,
-        isUser: msg.isUser,
-        timestamp: msg.timestamp,
-        tools: msg.tools
-      }))
-    };
-
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-      type: 'application/json'
-    });
-    
-    const url = window.URL.createObjectURL(blob);
+    const dataStr = JSON.stringify(this.messages, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `mcp-chat-history-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(link);
+    link.download = `chat-history-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url);
   }
 
-  formatMessage(content: string): string {
-    return content
-      .replace(/\n/g, '<br>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`(.*?)`/g, '<code>$1</code>');
-  }
-
-  formatJSON(obj: any): string {
-    if (typeof obj === 'string') {
-      return obj;
+  clearHistory(): void {
+    if (confirm('Are you sure you want to clear all conversation history? This action cannot be undone.')) {
+      this.messages = [];
+      localStorage.removeItem('chatMessages');
     }
-    return JSON.stringify(obj, null, 2);
-  }
-
-  trackMessage(index: number, message: ChatMessage): string {
-    return message.id;
-  }
-
-  get Math() {
-    return Math;
   }
 }
