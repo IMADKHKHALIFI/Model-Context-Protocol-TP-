@@ -1,0 +1,16 @@
+<div class="app-container">
+  <header class="app-header">
+    <div class="container">
+      <h1>🤖 MCP Assistant</h1>
+      <nav class="nav">
+        <a routerLink="/chat" routerLinkActive="active" class="nav-link">💬 Chat</a>
+        <a routerLink="/tools" routerLinkActive="active" class="nav-link">🔧 Tools</a>
+        <a routerLink="/history" routerLinkActive="active" class="nav-link">📝 History</a>
+      </nav>
+    </div>
+  </header>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+  <app-connection-status></app-connection-status>
+</div>
