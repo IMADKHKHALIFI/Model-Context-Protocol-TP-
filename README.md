@@ -368,7 +368,14 @@ Pour toute question ou problème :
 
 ---
 
-**Développé avec ❤️ par l'équipe MCP Platform**
+## 👨‍💻 Développeur
+
+**Développé par Imad EL KHELYFY**
+
+📧 **Email** : imadelkhelyfy@gmail.com  
+🎓 **Institution** : Faculté des Sciences Meknès  
+📚 **Filière** : Sciences des Données et IA  
+📖 **Module** : Systèmes Distribués  
 
 > 🚀 **Version actuelle** : 1.0.0  
 > 📅 **Dernière mise à jour** : Juillet 2025  
