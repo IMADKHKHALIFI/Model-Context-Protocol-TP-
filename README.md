@@ -89,7 +89,6 @@ Serveur MCP Java avec outils spécialisés :
 - `get_stock_price` : Prix des actions
 - `list_companies` : Liste des entreprises
 
-![Stock Tools](./screnne/tools_exemple.png)
 
 ### 4. Python MCP Server
 
