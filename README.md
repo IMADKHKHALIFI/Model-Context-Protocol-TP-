@@ -167,7 +167,7 @@ ollama serve           # Port 11434
 3. **Outils** : Les outils MCP sont automatiquement disponibles
 4. **Thème** : Basculez entre mode clair/sombre
 
-![Chat Interface](./screnne/2.png)
+![Frontend Interface](./screnne/frontend.png)
 
 ### Utilisation des Outils
 
