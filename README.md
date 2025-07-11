@@ -200,20 +200,35 @@ curl "http://localhost:8080/mcp/companies"
 
 ## 📸 Screenshots
 
-### Interface Principale
-![Main Interface](./screnne/4.png)
+![Screenshot 1](./screnne/1.png)
 
-### Gestion des Outils
-![Tools Management](./screnne/5.png)
+![Screenshot 2](./screnne/2.png)
 
-### Informations Employés
-![Employee Info](./screnne/get_employee_info.png)
+![Screenshot 3](./screnne/3.png)
 
-### Historique des Conversations
-![Chat History](./screnne/6.png)
+![Screenshot 4](./screnne/4.png)
 
-### Mode Sombre
-![Dark Mode](./screnne/7.png)
+![Screenshot 5](./screnne/5.png)
+
+![Screenshot 6](./screnne/6.png)
+
+![Screenshot 7](./screnne/7.png)
+
+![Frontend Interface](./screnne/frontend.png)
+
+![Tools Frontend](./screnne/tools-frontend.png)
+
+![Get Employee Info MCP Server Python](./screnne/get%20emplyer%20info%20mcp%20server%20python.png)
+
+![Get Post](./screnne/get-post%20.png)
+
+![Get Employee Info](./screnne/get_employee_info.png)
+
+![Ollama](./screnne/ollama%20.png)
+
+![Post Get Message](./screnne/post-get-message.png)
+
+![Tools Example](./screnne/tools_exemple.png)
 
 ## 📚 API Documentation
 
@@ -375,8 +390,4 @@ Pour toute question ou problème :
 📧 **Email** : imadelkhelyfy@gmail.com  
 🎓 **Institution** : Faculté des Sciences Meknès  
 📚 **Filière** : Sciences des Données et IA  
-📖 **Module** : Systèmes Distribués  
-
-> 🚀 **Version actuelle** : 1.0.0  
-> 📅 **Dernière mise à jour** : Juillet 2025  
-> 🌟 **Status** : En développement actif
+📖 **Module** : Systèmes Distribués
