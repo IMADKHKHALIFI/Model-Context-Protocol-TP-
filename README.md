@@ -346,35 +346,6 @@ python -m pytest    # Tests (si configuré)
 - **Conventional Commits** - Messages de commit standardisés
 - **Component-First** - Architecture orientée composants
 
-## 🤝 Contribution
-
-1. **Fork** le projet
-2. **Créez** une branche feature (`git checkout -b feature/amazing-feature`)
-3. **Committez** vos changements (`git commit -m 'Add amazing feature'`)
-4. **Push** vers la branche (`git push origin feature/amazing-feature`)
-5. **Ouvrez** une Pull Request
-
-### Guidelines
-
-- Suivez les conventions de code existantes
-- Ajoutez des tests pour les nouvelles fonctionnalités
-- Mettez à jour la documentation si nécessaire
-- Testez sur différents navigateurs/environnements
-
-## 📝 License
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
-## 🆘 Support
-
-Pour toute question ou problème :
-
-1. Consultez la documentation
-2. Vérifiez les issues existantes
-3. Créez une nouvelle issue avec un maximum de détails
-4. Joignez les logs et screenshots si nécessaire
-
----
 
 ## 👨‍💻 Développeur
 
