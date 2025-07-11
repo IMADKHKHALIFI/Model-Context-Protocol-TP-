@@ -179,7 +179,7 @@ IA: [Utilise get_company_info("Apple")]
 Réponse: Informations détaillées sur Apple Inc.
 ```
 
-![Tools Example](./screnne/3.png)
+![Stock Tools](./screnne/tools_exemple.png)
 
 ### API Rest
 
