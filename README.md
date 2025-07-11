@@ -26,7 +26,6 @@ Cette plateforme MCP offre une interface complète pour interagir avec des modè
 - **Serveur MCP Python** : Serveur MCP avec outils personnalisés
 - **Intégration Ollama** : Support pour les modèles locaux
 
-![Architecture Overview](./screnne/1.png)
 
 ## 🏗 Architecture
 
@@ -58,7 +57,6 @@ Interface utilisateur moderne et responsive avec :
 - Statut de connexion en temps réel
 - Basculement de thème intuitif
 
-![Tools Interface](./screnne/tools-frontend.png)
 
 ### 2. MCP Client (Spring Boot)
 
@@ -77,7 +75,6 @@ POST /mcp/companies          # Gestion des entreprises
 GET  /mcp/stock              # Informations boursières
 ```
 
-![API Endpoints](./screnne/get-post%20.png)
 
 ### 3. MCP Server (Spring Boot)
 
@@ -102,7 +99,6 @@ Serveur MCP Python avec fonctionnalités étendues :
 - **Intégration Python** : Outils flexibles
 - **API REST** : Endpoints spécialisés
 
-![Python MCP Server](./screnne/get%20emplyer%20info%20mcp%20server%20python.png)
 
 ## ⚙️ Installation et Configuration
 
@@ -156,7 +152,6 @@ ollama pull llama2
 ollama serve           # Port 11434
 ```
 
-![Ollama Integration](./screnne/ollama%20.png)
 
 ## 🎮 Utilisation
 
@@ -196,7 +191,6 @@ curl "http://localhost:8080/tools"
 curl "http://localhost:8080/mcp/companies"
 ```
 
-![API Testing](./screnne/post-get-message.png)
 
 ## 📸 Screenshots
 
